@@ -1,4 +1,5 @@
-## docblock-parser
+# docblock-parser [![Build
+Status](https://travis-ci.org/fkling/docblock-parser.svg?branch=master)](https://travis-ci.org/fkling/docblock-parser)
 
 A line based doc block parser.
 
