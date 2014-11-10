@@ -16,6 +16,7 @@ of a tag make up its value, on a line basis.
 > docblockParser.parse(/** @type {Object} */);
 { text: '',
   tags: { type: '{Object} Description' } }
+```
 
 ## Terminology
 
