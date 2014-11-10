@@ -9,6 +9,14 @@ parsers seem to make fixed assumptions about the value of a tag.
 This is a slightly less opinionated parser. It allows you to specify which parts
 of a tag make up its value, on a line basis.
 
+## Quick example
+
+```js
+> var docblockParser = require('docblock-parser');
+> docblockParser.parse(/** @type {Object} */);
+{ text: '',
+  tags: { type: '{Object} Description' } }
+
 ## Terminology
 
 The parser is built around the idea of *consuming lines*. If the parser
@@ -20,9 +28,9 @@ consumer.
 A **consumer** is a function that accepts a `Docblock` object and returns a
 value which is associated with the tag or free text.
 
-A **`Docblock`** object is just a stack, with which a consumer can `.peek()` at
-the current line or `.pop()` it from the stack to consume it. A consumer
-`.pop()`s lines until a condition is met ( or there no lines left.
+A **`Docblock`** object is just a stack of lines, with which a consumer can
+`.peek()` at the current line or `.pop()` it from the stack to consume it.
+A consumer `.pop()`s lines until a condition is met (or there no lines left).
 
 ## Install
 
@@ -31,45 +39,45 @@ npm install docblock-parser
 ```
 ## API
 
-### `docblockParser.parse(docstring)`
+#### `docblockParser.parse(docstring)`
 
 This parses `docstring` with the default configuration (`defaultConfig.js`)
 which provides sensible defaults for [jsdoc
 tags](https://code.google.com/p/jsdoc-toolkit/wiki/TagReference).
 
-### `docblockParser(config).parse(docstring)`
+#### `docblockParser(config).parse(docstring)`
 
 Allows you to specific your own consumers and tags.
 
-#### `config.text`
+##### `config.text`
 
 Type: `function`
 
 A consumer for all free text inside the doc block. I.e. text not associated with
 a specific tag.
 
-#### `config.default`
+##### `config.default`
 
 Type: `function`
 
 The fallback consumer used for tags not listed in `config.tags`.
 
-### `config.tags`
+#### `config.tags`
 
 Type: `object`
 
 A `tag name -> consumer` mapping that allows to use different strategies for
 different tags.
 
-### Returns `{text: (Array|string), tags {tagname: (Array|?), ...}}`
+#### Returns `{text: (Array|string), tags {tagname: (Array|?), ...}}`
 
 
-#### `text` 
+##### `text` 
 
 Is an array if the doc block contains multiple sections of free text, else a
 single string.
 
-#### `tags`
+##### `tags`
 
 Is an object of `tagname -> value` mappings. The type of the value depends on
 the consumer being used for the tag, but it will definitely be an array if the
@@ -157,7 +165,7 @@ The parser comes with consumers for the most common use cases:
   - Consumes lines until it finds a non-empty line.
   - Returns: The collected line. That is the value of the tag.
 
-- `multipleParameterTag(delimiter)`
+- `multiParameterTag(delimiter)`
   - Based on `multilineTilEmptyLineOrTag`
   - Returns: Returns an array of values. The values come from
     `multilineTilEmptyLineOrTag` split by `delimiter`.

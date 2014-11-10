@@ -2,6 +2,12 @@
   "name": "docblock-parser",
   "version": "0.0.1",
   "description": "A standalone docblock parser",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fkling/docblock-parser.git"
+  },
+  "homepage": "https://github.com/fkling/docblock-parser",
+  "bugs": "https://github.com/fkling/docblock-parser/issues",
   "main": "lib/index.js",
   "scripts": {
     "test": "mkdir -p lib/ && esnext -o lib/ ./*.js && jest",
