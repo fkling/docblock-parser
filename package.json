@@ -1,0 +1,28 @@
+{
+  "name": "docblock-parser",
+  "version": "0.0.1",
+  "description": "A standalone docblock parser",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "mkdir -p lib/ && esnext -o lib/ ./*.js && jest",
+    "prepublish": "mkdir -p lib/ && esnext -o lib/ ./*.js"
+  },
+  "keywords": [
+    "docs",
+    "documention",
+    "docblock",
+    "parser",
+    "type",
+    "annotation",
+    "jsdoc"
+  ],
+  "author": "Felix Kling",
+  "license": "ISC",
+  "devDependencies": {
+    "esnext": "^0.13.0",
+    "jest-cli": "^0.1.18"
+  },
+  "dependencies": {
+    "lodash.assign": "^2.4.1"
+  }
+}
