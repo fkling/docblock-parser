@@ -13,7 +13,7 @@ of a tag make up its value, on a line basis.
 
 ```js
 > var docblockParser = require('docblock-parser');
-> docblockParser.parse(/** @type {Object} */);
+> docblockParser.parse('/** @type {Object} */');
 { text: '',
   tags: { type: '{Object} Description' } }
 ```
@@ -63,22 +63,21 @@ Type: `function`
 
 The fallback consumer used for tags not listed in `config.tags`.
 
-#### `config.tags`
+##### `config.tags`
 
 Type: `object`
 
 A `tag name -> consumer` mapping that allows to use different strategies for
 different tags.
 
-#### Returns `{text: (Array|string), tags {tagname: (Array|?), ...}}`
+##### Returns `{text: (Array|string), tags {tagname: (Array|?), ...}}`
 
-
-##### `text` 
+###### `text` 
 
 Is an array if the doc block contains multiple sections of free text, else a
 single string.
 
-##### `tags`
+###### `tags`
 
 Is an object of `tagname -> value` mappings. The type of the value depends on
 the consumer being used for the tag, but it will definitely be an array if the
