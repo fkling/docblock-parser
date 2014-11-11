@@ -6,7 +6,7 @@ var assign = require('lodash.assign');
 var consumers = require('./consumers');
 var defaultConfig = require('./defaultConfig');
 
-var DOCBLOCK_PATTERN = /^\s*\/\*\*[^]*\*\/\s*$/;
+var DOCBLOCK_PATTERN = /^\/\*\*|^\s*\* ?/m;
 var TAG_PATTERN = /^\s*@([^\s]+)\s?/;
 
 function docblockParser(config={}) {
@@ -19,7 +19,12 @@ function docblockParser(config={}) {
 
   function parse(docstring) {
     if (!docstring || !DOCBLOCK_PATTERN.test(docstring)) {
-      throw new TypeError('Argument is not a valid docstring (/** ... */).');
+      throw new TypeError(
+        "Argument does not appear to be a valid docstring. A docstring " +
+        "usually starts with /**, ends with */ and every line in between " +
+        "starts with a single *. This is what I got instead:\n\n" +
+        docstring
+      );
     }
 
     var text = [];
