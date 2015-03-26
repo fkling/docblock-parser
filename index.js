@@ -74,6 +74,7 @@ function docblockParser(config={}) {
 
 docblockParser.parse = docblockParser(defaultConfig).parse;
 docblockParser.consumeTil = require('./consumeTil');
+docblockParser.defaultConfig = defaultConfig;
 assign(docblockParser, consumers);
 
 module.exports = docblockParser;
