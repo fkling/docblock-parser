@@ -5,7 +5,7 @@ A line based doc block parser.
 ## Motivation
 
 I wasn't able to find a standalone, not opinionated docblock parser. Most
-parsers seem to make fixed assumptions about the value of a tag.  
+parsers seem to make fixed assumptions about the value of a tag.
 This is a slightly less opinionated parser. It allows you to specify which parts
 of a tag make up its value, on a line basis.
 
@@ -50,6 +50,30 @@ tags](https://code.google.com/p/jsdoc-toolkit/wiki/TagReference).
 
 Allows you to specific your own consumers and tags.
 
+##### `config.docBlockPattern`
+
+Type: `RegExp`
+
+The pattern to validate a docblock. Defaults to `/^\/\*\*|^\s*\* ?/m`.
+
+##### `config.startPattern`
+
+Type: `RegExp`
+
+The start of docblock. The match will be removed before parsing. Defaults to `/^\s*\/\*\*\s?/`.
+
+##### `config.endPattern`
+
+Type: `RegExp`
+
+The end of docblock. The match will be removed before parsing. Defaults to `/\*\/\s*$/`.
+
+##### `config.linePattern`
+
+Type: `RegExp`
+
+Start of a line in a docblock. The match will be removed while parsing aline. Defaults to `/^\s*\* ?/`.
+
 ##### `config.text`
 
 Type: `function`
@@ -72,7 +96,7 @@ different tags.
 
 ##### Returns `{text: (Array|string), tags {tagname: (Array|?), ...}}`
 
-###### `text` 
+###### `text`
 
 Is an array if the doc block contains multiple sections of free text, else a
 single string.
@@ -85,6 +109,7 @@ tag appeared multiple times in the doc block (e.g. `@param`).
 
 ## Examples
 
+### Custom Tags
 ```js
 var docblockParser = require('./');
 var docstring = [
@@ -133,7 +158,6 @@ returns
   }
 }
 ```
-
 Note that there is no line break after "Some free text" and "With description".
 If you are using the built-in default consumer (`consumeTil`)(which all of the
 built-in consumer do), leading and trailing lines will be removed form the
@@ -142,12 +166,34 @@ value.
 In this example we specified our own tag consumers. We could have also used the
 default ones and just called `docblockParser.parse(docstring)`.
 
+### Custom format
+```js
+var docblockParser = require('./');
+var docstring = '{##\nSome free text\n@memberOf test\n##}';
+var result = docblockParser({
+	docBlockPattern: /\{##([^#]*)##\}/ig,
+	startPattern: /^\s*\{##\s?/,
+	endPattern: /##\}\s*$/
+}).parse(docstring);
+```
+
+returns
+
+```js
+{
+  text: 'Some free text',
+  tags: {
+    memberOf: 'test'
+  }
+}
+```
+
 ### Built-in consumers
 
 The parser comes with consumers for the most common use cases:
 
 - `multilineTilTag`
- - Consumes as many lines until it encounters a line starting with the 
+ - Consumes as many lines until it encounters a line starting with the
    @tagname` pattern.
  - Returns: The collected lines. This is usually the safest to use, since it
    may not always be possible to format the values of tags in a specific way.

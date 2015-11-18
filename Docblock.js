@@ -1,18 +1,18 @@
 "use strict";
 
-var START_PATTERN = /^\s*\/\*\*\s?/;
-var END_PATTERN = /\*\/\s*$/;
-
 /**
  * This class is used to process a docblock line by line.
  */
 class Docblock {
-  constructor(lines) {
+  constructor(lines, startPattern, endPattern, linePattern) {
+    this._startPattern = startPattern || /^\s*\/\*\*\s?/;
+    this._endPattern = endPattern || /\*\/\s*$/;
+    this._linePattern = linePattern || /^\s*\* ?/;
     this._current = 0;
     this._lines = lines;
-    this._lines[0] = lines[0].replace(START_PATTERN, '');
+    this._lines[0] = lines[0].replace(this._startPattern, '');
     this._lines[lines.length - 1] =
-      lines[lines.length - 1].replace(END_PATTERN, '');
+      lines[lines.length - 1].replace(this._endPattern, '');
   }
 
   /**
@@ -22,7 +22,7 @@ class Docblock {
    */
   peek() {
     if (this._current < this._lines.length) {
-      return this._lines[this._current].replace(/^\s*\* ?/, '');
+      return this._lines[this._current].replace(this._linePattern, '');
     }
     return null;
   }

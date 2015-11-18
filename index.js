@@ -6,9 +6,6 @@ var assign = require('lodash.assign');
 var consumers = require('./consumers');
 var defaultConfig = require('./defaultConfig');
 
-var DOCBLOCK_PATTERN = /^\/\*\*|^\s*\* ?/m;
-var TAG_PATTERN = /^\s*@([^\s]+)\s?/;
-
 function docblockParser(config={}) {
   if (!config.text) {
     config.text = defaultConfig.text;
@@ -16,9 +13,24 @@ function docblockParser(config={}) {
   if (!config.default) {
     config.default = defaultConfig.default;
   }
+  if (!config.docBlockPattern) {
+    config.docBlockPattern = /^\/\*\*|^\s*\* ?/m;
+  }
+  if (!config.tagPattern) {
+    config.tagPattern = /^\s*@([^\s]+)\s?/;
+  }
+  if (!config.startPattern) {
+    config.startPattern = /^\s*\/\*\*\s?/;
+  }
+  if (!config.endPattern) {
+    config.endPattern = /\*\/\s*$/;
+  }
+  if (!config.linePattern) {
+    config.linePattern = /^\s*\* ?/;
+  }
 
   function parse(docstring) {
-    if (!docstring || !DOCBLOCK_PATTERN.test(docstring)) {
+    if (!docstring || !config.docBlockPattern.test(docstring)) {
       throw new TypeError(
         "Argument does not appear to be a valid docstring. A docstring " +
         "usually starts with /**, ends with */ and every line in between " +
@@ -31,14 +43,14 @@ function docblockParser(config={}) {
     var tags = {};
     var tag;
 
-    var docblock = new Docblock(docstring.split('\n'));
+    var docblock = new Docblock(docstring.split('\n'), config.startPattern, config.endPattern, config.linePattern);
     while (!docblock.isExhausted()) {
       consumers.emptyLines(docblock);
       var line = docblock.peek();
       if (!line) { continue;}
-      var match = line.match(TAG_PATTERN);
+      var match = line.match(config.tagPattern);
       if (match) {
-        docblock.replace(line.replace(TAG_PATTERN, ''));
+        docblock.replace(line.replace(config.tagPattern, ''));
         tag = match[1];
         var consumer = config.tags[tag] || config.default;
         var tagValue = consumer(docblock);

@@ -28,6 +28,17 @@ describe('docblock-parser', function() {
       }).not.toThrow();
     });
 
+    it('allows to configure a custom docblock format', function() {
+      expect(function() {
+        var config = {
+          docBlockPattern: /\{##([^#]*)##\}/ig,
+          startPattern: /^\s*\{##\s?/,
+          endPattern: /##\}\s*$/
+        };
+        docblockParser(config).parse('{## foo ##}');
+      }).not.toThrow();
+    });
+
     it('throws if the argument is not a docblock', function() {
       expect(function() {
         docblockParser.parse('foo');
@@ -46,6 +57,26 @@ describe('docblock-parser', function() {
         var text = 'Some multiline\ntext with empty\n\nlines.';
         var ds = docstring(text.split('\n'));
         expect(docblockParser.parse(ds).text).toEqual(text);
+      });
+
+      it('extracts text from a single line with a custom format', function() {
+        var config = {
+          docBlockPattern: /\{##([^#]*)##\}/ig,
+          startPattern: /^\s*\{##\s?/,
+          endPattern: /##\}\s*$/
+        };
+        expect(docblockParser(config).parse('{## foo bar ##}').text).toEqual('foo bar');
+      });
+
+      it('extracts text from multiple lines with a custom format', function() {
+        var config = {
+          docBlockPattern: /\{##([^#]*)##\}/ig,
+          startPattern: /^\s*\{##\s?/,
+          endPattern: /##\}\s*$/
+        };
+        var text = 'Some multiline\ntext with empty\n\nlines.';
+        var doc = '{##\n' + text + '\n##}';
+        expect(docblockParser(config).parse(doc).text).toEqual(text);
       });
     });
 
