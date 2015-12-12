@@ -1,6 +1,6 @@
 {
   "name": "docblock-parser",
-  "version": "0.1.3",
+  "version": "1.0.0",
   "description": "A standalone docblock parser",
   "repository": {
     "type": "git",
@@ -35,6 +35,8 @@
   },
   "jest": {
     "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
-    "testPathDirs": ["src/"]
+    "testPathDirs": [
+      "src/"
+    ]
   }
 }
